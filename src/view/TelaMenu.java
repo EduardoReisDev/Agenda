@@ -7,6 +7,7 @@ package view;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -19,6 +20,9 @@ public class TelaMenu extends javax.swing.JFrame {
      */
     public TelaMenu() {
         initComponents();
+        
+        DefaultTableModel modelo = (DefaultTableModel) tableContatos.getModel();
+        tableContatos.setRowSorter(new TableRowSorter(modelo));
     }
 
     /**
