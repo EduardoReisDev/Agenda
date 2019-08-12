@@ -8,6 +8,8 @@ package view;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
+import modal.dao.AgendaDAO;
+import model.bean.Agenda;
 
 /**
  *
@@ -20,9 +22,26 @@ public class TelaMenu extends javax.swing.JFrame {
      */
     public TelaMenu() {
         initComponents();
-        
         DefaultTableModel modelo = (DefaultTableModel) tableContatos.getModel();
         tableContatos.setRowSorter(new TableRowSorter(modelo));
+        readJTable();
+    }
+    
+    public void readJTable(){
+        DefaultTableModel modelo = (DefaultTableModel) tableContatos.getModel();
+        modelo.setNumRows(0);
+        AgendaDAO adao = new AgendaDAO();
+        
+        for (Agenda a: adao.read()){
+            modelo.addRow(new Object[]{
+                a.getIdContato(),
+                a.getNomeContato(),
+                a.getTelefoneContato(),
+                a.getCelularContato(),
+                a.getEmailContato(),
+                a.getCategoria()
+            });
+        }
     }
 
     /**
@@ -197,11 +216,11 @@ public class TelaMenu extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Nome", "Telefone", "Celular", "E-mail", "Categoria"
+                "Código", "Nome", "Telefone", "Celular", "E-mail", "Categoria"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -307,9 +326,8 @@ public class TelaMenu extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -331,9 +349,26 @@ public class TelaMenu extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         //ADICIONANDO CONTATO
-        DefaultTableModel dtmContatos = (DefaultTableModel) tableContatos.getModel();
-        Object [] dados = {nomeContato.getText(), telefoneContato.getText(), celularContato.getText(), emailContato.getText(), categoria.getSelectedItem().toString()};
-        dtmContatos.addRow(dados);
+        
+        Agenda a = new Agenda();
+        AgendaDAO dao = new AgendaDAO();
+        a.setNomeContato(nomeContato.getText());
+        a.setTelefoneContato(telefoneContato.getText());
+        a.setCelularContato(celularContato.getText());
+        a.setEmailContato(emailContato.getText());
+        a.setCategoria(categoria.getSelectedItem().toString());
+        dao.create(a);
+        
+        nomeContato.setText("");
+        telefoneContato.setText("");
+        celularContato.setText("");
+        emailContato.setText("");
+        categoria.setSelectedItem("Selecione");
+        
+        readJTable();
+        //DefaultTableModel dtmContatos = (DefaultTableModel) tableContatos.getModel();
+        //Object [] dados = {nomeContato.getText(), telefoneContato.getText(), celularContato.getText(), emailContato.getText(), categoria.getSelectedItem().toString()};
+        //dtmContatos.addRow(dados);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
