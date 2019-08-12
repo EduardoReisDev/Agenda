@@ -43,6 +43,23 @@ public class TelaMenu extends javax.swing.JFrame {
             });
         }
     }
+    
+        public void readJTableForDesc(String desc){
+                DefaultTableModel modelo = (DefaultTableModel) tableContatos.getModel();
+                modelo.setNumRows(0);
+                AgendaDAO adao = new AgendaDAO();
+
+                for (Agenda a: adao.readForDesc(desc)){
+                    modelo.addRow(new Object[]{
+                        a.getIdContato(),
+                        a.getNomeContato(),
+                        a.getTelefoneContato(),
+                        a.getCelularContato(),
+                        a.getEmailContato(),
+                        a.getCategoria()
+                    });
+                }
+        }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -57,12 +74,11 @@ public class TelaMenu extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jButton7 = new javax.swing.JButton();
+        txtBuscaDesc = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -111,15 +127,6 @@ public class TelaMenu extends javax.swing.JFrame {
             }
         });
 
-        jButton4.setBackground(new java.awt.Color(255, 255, 255));
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/imprimir.png"))); // NOI18N
-        jButton4.setText("Imprimir");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
-            }
-        });
-
         jButton5.setBackground(new java.awt.Color(255, 255, 255));
         jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/sobre.png"))); // NOI18N
         jButton5.setText("Sobre");
@@ -145,15 +152,13 @@ public class TelaMenu extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(40, 40, 40)
                 .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(41, 41, 41)
                 .addComponent(jButton3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(37, 37, 37)
                 .addComponent(jButton5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(41, 41, 41)
                 .addComponent(jButton6)
                 .addContainerGap(17, Short.MAX_VALUE))
         );
@@ -165,7 +170,6 @@ public class TelaMenu extends javax.swing.JFrame {
                     .addComponent(jButton1)
                     .addComponent(jButton2)
                     .addComponent(jButton3)
-                    .addComponent(jButton4)
                     .addComponent(jButton5)
                     .addComponent(jButton6))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -175,11 +179,15 @@ public class TelaMenu extends javax.swing.JFrame {
 
         jLabel1.setText("Pesquisar Contato");
 
-        jButton7.setBackground(new java.awt.Color(255, 255, 255));
-        jButton7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/busca.png"))); // NOI18N
-        jButton7.setText("Buscar");
+        txtBuscaDesc.setBackground(new java.awt.Color(255, 255, 255));
+        txtBuscaDesc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/busca.png"))); // NOI18N
+        txtBuscaDesc.setText("Buscar");
+        txtBuscaDesc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtBuscaDescActionPerformed(evt);
+            }
+        });
 
-        jTextField1.setText("Digite oque produra...");
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField1ActionPerformed(evt);
@@ -196,14 +204,14 @@ public class TelaMenu extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 511, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton7)
+                .addComponent(txtBuscaDesc)
                 .addGap(30, 30, 30))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton7)
+                    .addComponent(txtBuscaDesc)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
                 .addGap(0, 11, Short.MAX_VALUE))
@@ -374,28 +382,50 @@ public class TelaMenu extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         //EDITAR
         if(tableContatos.getSelectedRow() != -1){
-            tableContatos.setValueAt(nomeContato.getText(), tableContatos.getSelectedRow(), 0);
-            tableContatos.setValueAt(telefoneContato.getText(), tableContatos.getSelectedRow(), 1);
-            tableContatos.setValueAt(celularContato.getText(), tableContatos.getSelectedRow(), 2);
-            tableContatos.setValueAt(emailContato.getText(), tableContatos.getSelectedRow(), 3);
-            tableContatos.setValueAt(categoria.getSelectedItem(), tableContatos.getSelectedRow(), 4);
+            Agenda a = new Agenda();
+            AgendaDAO dao = new AgendaDAO();
+            a.setNomeContato(nomeContato.getText());
+            a.setTelefoneContato(telefoneContato.getText());
+            a.setCelularContato(celularContato.getText());
+            a.setEmailContato(emailContato.getText());
+            a.setCategoria(categoria.getSelectedItem().toString());
+            a.setIdContato((int) tableContatos.getValueAt(tableContatos.getSelectedRow(), 0));
+            dao.update(a);
+
+            nomeContato.setText("");
+            telefoneContato.setText("");
+            celularContato.setText("");
+            emailContato.setText("");
+            categoria.setSelectedItem("Selecione");
+
+            readJTable();
+        } else{
+            JOptionPane.showMessageDialog(null, "Selecione um contato para editar!");
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // EXCLUIR
         if(tableContatos.getSelectedRow() != -1){
-            DefaultTableModel dtmContatos = (DefaultTableModel) tableContatos.getModel();
-            dtmContatos.removeRow(tableContatos.getSelectedRow());
-            JOptionPane.showMessageDialog(null, "Contato excluido com sucesso!");
-        }else{
-            JOptionPane.showMessageDialog(null, "Selecione um contato para excluir.");
+            Agenda a = new Agenda();
+            AgendaDAO dao = new AgendaDAO();
+
+            a.setIdContato((int) tableContatos.getValueAt(tableContatos.getSelectedRow(), 0));
+            dao.delete(a);
+
+            nomeContato.setText("");
+            telefoneContato.setText("");
+            celularContato.setText("");
+            emailContato.setText("");
+            categoria.setSelectedItem("Selecione");
+
+            readJTable();
+        }
+        
+        else{
+            JOptionPane.showMessageDialog(null, "Selecione um contato para excluir!");
         }
     }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         TelaSobre telaSobre = new TelaSobre();
@@ -413,13 +443,18 @@ public class TelaMenu extends javax.swing.JFrame {
     private void tableContatosKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tableContatosKeyReleased
         // SELECIONANDO E TRAZENDO DADOS PARA EDITAR
         if(tableContatos.getSelectedRow() != -1){
-            nomeContato.setText(tableContatos.getValueAt(tableContatos.getSelectedRow(), 0).toString());
-            telefoneContato.setText(tableContatos.getValueAt(tableContatos.getSelectedRow(), 1).toString());
-            celularContato.setText(tableContatos.getValueAt(tableContatos.getSelectedRow(), 2).toString());
-            emailContato.setText(tableContatos.getValueAt(tableContatos.getSelectedRow(), 3).toString());
-            categoria.setSelectedItem(tableContatos.getValueAt(tableContatos.getSelectedRow(), 4).toString());   
+            nomeContato.setText(tableContatos.getValueAt(tableContatos.getSelectedRow(), 1).toString());
+            telefoneContato.setText(tableContatos.getValueAt(tableContatos.getSelectedRow(), 2).toString());
+            celularContato.setText(tableContatos.getValueAt(tableContatos.getSelectedRow(), 3).toString());
+            emailContato.setText(tableContatos.getValueAt(tableContatos.getSelectedRow(), 4).toString());
+            categoria.setSelectedItem(tableContatos.getValueAt(tableContatos.getSelectedRow(), 5).toString());   
         }
     }//GEN-LAST:event_tableContatosKeyReleased
+
+    private void txtBuscaDescActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscaDescActionPerformed
+        // BUSCA
+        readJTableForDesc(txtBuscaDesc.getText());
+    }//GEN-LAST:event_txtBuscaDescActionPerformed
 
     /**
      * @param args the command line arguments
@@ -463,10 +498,8 @@ public class TelaMenu extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -482,5 +515,6 @@ public class TelaMenu extends javax.swing.JFrame {
     private javax.swing.JTextField nomeContato;
     private javax.swing.JTable tableContatos;
     private javax.swing.JTextField telefoneContato;
+    private javax.swing.JButton txtBuscaDesc;
     // End of variables declaration//GEN-END:variables
 }
