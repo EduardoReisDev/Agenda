@@ -47,9 +47,7 @@ public class TelaMenu extends javax.swing.JFrame {
         public void readJTableForDesc(String desc){
                 DefaultTableModel modelo = (DefaultTableModel) tableContatos.getModel();
                 modelo.setNumRows(0);
-                AgendaDAO adao = new AgendaDAO();
-
-                for (Agenda a: adao.readForDesc(desc)){
+                new AgendaDAO().readForDesc(desc).forEach(a->{
                     modelo.addRow(new Object[]{
                         a.getIdContato(),
                         a.getNomeContato(),
@@ -58,7 +56,20 @@ public class TelaMenu extends javax.swing.JFrame {
                         a.getEmailContato(),
                         a.getCategoria()
                     });
-                }
+                });
+
+                
+                
+               /* for (Agenda a: adao.readForDesc(desc)){
+                    modelo.addRow(new Object[]{
+                        a.getIdContato(),
+                        a.getNomeContato(),
+                        a.getTelefoneContato(),
+                        a.getCelularContato(),
+                        a.getEmailContato(),
+                        a.getCategoria()
+                    });
+                }*/
         }
 
     /**
@@ -453,7 +464,7 @@ public class TelaMenu extends javax.swing.JFrame {
 
     private void txtBuscaDescActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscaDescActionPerformed
         // BUSCA
-        readJTableForDesc(txtBuscaDesc.getText());
+        readJTableForDesc(jTextField1.getText());
     }//GEN-LAST:event_txtBuscaDescActionPerformed
 
     /**
