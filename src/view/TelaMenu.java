@@ -269,6 +269,11 @@ public class TelaMenu extends javax.swing.JFrame {
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Formulário para Cadastro e Edição de Contatos"));
 
         categoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione", "Familia", "Amigos", "Vizinhos", "Colegas", "Trabalho" }));
+        categoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                categoriaActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Nome do Contato");
 
@@ -466,6 +471,10 @@ public class TelaMenu extends javax.swing.JFrame {
         // BUSCA
         readJTableForDesc(jTextField1.getText());
     }//GEN-LAST:event_txtBuscaDescActionPerformed
+
+    private void categoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categoriaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_categoriaActionPerformed
 
     /**
      * @param args the command line arguments
